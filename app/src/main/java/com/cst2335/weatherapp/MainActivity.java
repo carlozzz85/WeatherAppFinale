@@ -1,10 +1,14 @@
 package com.cst2335.weatherapp;
 
+
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,8 +23,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.cst2335.WeatherApp.R;
+import com.cst2335.weatherapp.*;
+
 public class MainActivity extends AppCompatActivity {
     private TextView weatherTextView;
+    private Toolbar toolbar;
+
+    private String api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +38,45 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         weatherTextView = findViewById(R.id.textView_weather);
-        Button refreshButton = findViewById(R.id.button_refresh);
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new FetchWeatherTask().execute("http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=0c75f7d45db81f81013b6071385d59d4");
-            }
-        });
+            api = "http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=0c75f7d45db81f81013b6071385d59d4";
+        //api = "api.openweathermap.org/data/2.5/forecast?lat=44.34&lon=10.99&appid=0c75f7d45db81f81013b6071385d59d4";
+
+        // Assuming you have a button to refresh the weather
+        // You may need to modify the FetchWeatherTask call based on the option selected
+        findViewById(R.id.button_refresh).setOnClickListener(view ->
+                new FetchWeatherTask().execute(api));
+    }
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.three_day_forecast) {
+            api = "https://pro.openweathermap.org/data/2.5/forecast/hourly?lat=44.34&lon=10.99&appid=524901&appid=0c75f7d45db81f81013b6071385d59d4";
+            Toast.makeText(this, "4-Day Forecast", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.five_day_forecast) {
+            api = "https://pro.openweathermap.org/data/2.5/forecast/climate?lat=35&lon=139&appid=524901&appid=0c75f7d45db81f81013b6071385d59d4";
+            Toast.makeText(this, "30-Day Forecast", Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (id == R.id.developer_info) {
+
+            Toast.makeText(this, "Developed By Carlos Herrera", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
     private class FetchWeatherTask extends AsyncTask<String, Void, String> {
 

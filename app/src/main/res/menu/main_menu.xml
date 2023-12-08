@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/three_day_forecast"
+        android:title="3-Day Forecast"/>
+    <item
+        android:id="@+id/five_day_forecast"
+        android:title="5-Day Forecast"/>
+    <item
+        android:id="@+id/developer_info"
+        android:title="Developer Info"/>
+</menu>
